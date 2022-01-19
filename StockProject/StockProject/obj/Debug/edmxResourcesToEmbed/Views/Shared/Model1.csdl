@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DbStockProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblkategoriler">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblurunler" Relationship="Self.FK_tblurunler_tblkategoriler" FromRole="tblkategoriler" ToRole="tblurunler" />
+  </EntityType>
+  <EntityType Name="tblmusteriler">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="sehir" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="bakiye" Type="Decimal" Precision="18" Scale="2" />
+    <NavigationProperty Name="tblsatislar" Relationship="Self.FK_tblsatislar_tblmusteriler" FromRole="tblmusteriler" ToRole="tblsatislar" />
+  </EntityType>
+  <EntityType Name="tblpersoneller">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="departman" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="tblsatislar" Relationship="Self.FK_tblsatislar_tblpersoneller" FromRole="tblpersoneller" ToRole="tblsatislar" />
+  </EntityType>
+  <EntityType Name="tblsatislar">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="urun" Type="Int32" />
+    <Property Name="personel" Type="Int32" />
+    <Property Name="musteri" Type="Int32" />
+    <Property Name="fiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="tarih" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="tblmusteriler" Relationship="Self.FK_tblsatislar_tblmusteriler" FromRole="tblsatislar" ToRole="tblmusteriler" />
+    <NavigationProperty Name="tblpersoneller" Relationship="Self.FK_tblsatislar_tblpersoneller" FromRole="tblsatislar" ToRole="tblpersoneller" />
+    <NavigationProperty Name="tblurunler" Relationship="Self.FK_tblsatislar_tblurunler" FromRole="tblsatislar" ToRole="tblurunler" />
+  </EntityType>
+  <EntityType Name="tblurunler">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="marka" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="stok" Type="Int16" />
+    <Property Name="alisfiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="satisfiyat" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="kategori" Type="Int32" />
+    <NavigationProperty Name="tblkategoriler" Relationship="Self.FK_tblurunler_tblkategoriler" FromRole="tblurunler" ToRole="tblkategoriler" />
+    <NavigationProperty Name="tblsatislar" Relationship="Self.FK_tblsatislar_tblurunler" FromRole="tblurunler" ToRole="tblsatislar" />
+  </EntityType>
+  <Association Name="FK_tblurunler_tblkategoriler">
+    <End Role="tblkategoriler" Type="Self.tblkategoriler" Multiplicity="0..1" />
+    <End Role="tblurunler" Type="Self.tblurunler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblkategoriler">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tblurunler">
+        <PropertyRef Name="kategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatislar_tblmusteriler">
+    <End Role="tblmusteriler" Type="Self.tblmusteriler" Multiplicity="0..1" />
+    <End Role="tblsatislar" Type="Self.tblsatislar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblmusteriler">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tblsatislar">
+        <PropertyRef Name="musteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatislar_tblpersoneller">
+    <End Role="tblpersoneller" Type="Self.tblpersoneller" Multiplicity="0..1" />
+    <End Role="tblsatislar" Type="Self.tblsatislar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblpersoneller">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tblsatislar">
+        <PropertyRef Name="personel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblsatislar_tblurunler">
+    <End Role="tblurunler" Type="Self.tblurunler" Multiplicity="0..1" />
+    <End Role="tblsatislar" Type="Self.tblsatislar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblurunler">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="tblsatislar">
+        <PropertyRef Name="urun" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DbStockProjectEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblkategoriler" EntityType="Self.tblkategoriler" />
+    <EntitySet Name="tblmusteriler" EntityType="Self.tblmusteriler" />
+    <EntitySet Name="tblpersoneller" EntityType="Self.tblpersoneller" />
+    <EntitySet Name="tblsatislar" EntityType="Self.tblsatislar" />
+    <EntitySet Name="tblurunler" EntityType="Self.tblurunler" />
+    <AssociationSet Name="FK_tblurunler_tblkategoriler" Association="Self.FK_tblurunler_tblkategoriler">
+      <End Role="tblkategoriler" EntitySet="tblkategoriler" />
+      <End Role="tblurunler" EntitySet="tblurunler" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatislar_tblmusteriler" Association="Self.FK_tblsatislar_tblmusteriler">
+      <End Role="tblmusteriler" EntitySet="tblmusteriler" />
+      <End Role="tblsatislar" EntitySet="tblsatislar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatislar_tblpersoneller" Association="Self.FK_tblsatislar_tblpersoneller">
+      <End Role="tblpersoneller" EntitySet="tblpersoneller" />
+      <End Role="tblsatislar" EntitySet="tblsatislar" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblsatislar_tblurunler" Association="Self.FK_tblsatislar_tblurunler">
+      <End Role="tblurunler" EntitySet="tblurunler" />
+      <End Role="tblsatislar" EntitySet="tblsatislar" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
